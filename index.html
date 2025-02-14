@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sumitra Goswami</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+    <style>
+        .user-message {
+            color: blue; /* Color for user questions */
+            font-weight: bold;
+        }
+
+        .bot-message {
+            color: green; /* Color for bot answers */
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="navbar">
+            <div class="icon">
+                <h1 class="logo">@Sumi</h1>
+            </div>
+            <div class="menu"> 
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#achievements">Achievements</a></li>
+                    <li><a href="#contacts">Contacts</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="content">
+            <p>Travel and tourism unlock the wonders of the world, inviting people to explore and immerse themselves in new environments for leisure, business, or other adventures. This vibrant global industry intertwines hospitality, transportation, and entertainment, creating a tapestry of unforgettable experiences. As a powerhouse of economic growth, it fuels job creation, cultural exchange, and community development.</p>
+            <p class="quote">Saint Augustine - "The world is a book, and those who do not travel read only one page."</p>
+            <p>I am Sumitra Goswami, a travel expert. Let me help you with your travel needs. With years of experience exploring various destinations and cultures, I can offer personalized travel advice, tips on the best places to visit, and how to make the most of your journey. Whether you're looking for a relaxing beach vacation, an adventurous mountain trek, or an immersive cultural experience, I'm here to guide you every step of the way. Let's turn your travel dreams into reality!</p>
+            <p>I worked at MakeMyTrip as a Holiday Expert from 2012 to 2025. In my role, I specialized in creating domestic and international travel packages, assisting customers in planning their trips, and ensuring they had the best possible experience. Whether you're interested in a luxurious getaway or a budget-friendly adventure, I was there to help every step of the way.</p>
+            <a href="#about" class="btn">Learn More About Me</a>
+        </div>
+    </div>
+    <div class="about" id="about">
+        <div class="content">
+            <h2>About Me</h2>
+            <div class="profile">
+                <img src="MyPh.jpg" alt="Profile Photo">
+                <div class="info">
+                    <h3>Sumitra Goswami</h3>
+                    <p><strong>Professional Info:</strong><br>BA Graduate in Philosophy<br>Diploma (Double Honors) in International Airlines and Travel Management<br>Work Status: Travel Partner (Regional Zone)</p>
+                    <p><strong>Qualities:</strong><br>Logical and analytical analysis and Emotional Intelligence</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="achievements" id="achievements">
+        <div class="content">
+            <h2>Achievements</h2>
+            <div class="slideshow-container">
+                <div class="slide">
+                    <img src="C1.jpg" alt="Certificate 1">
+                </div>
+                <div class="slide">
+                    <img src="C2.jpg" alt="Certificate 2">
+                </div>
+                <div class="slide">
+                    <img src="C3.jpg" alt="Certificate 3">
+                </div>
+                <div class="slide">
+                    <img src="MMT.jpg" alt="Certificate 3">
+                </div>
+                <div class="slide">
+                    <img src="YC.jpg" alt="Certificate 3">
+                </div>
+            </div>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+    </div>
+    <div id="chatbot">
+        <div id="chatbot-header">
+            <h2>Travel Assistant</h2>
+        </div>
+        <div id="chatbot-messages"></div>
+        <input type="text" id="chatbot-input" placeholder="Ask me anything..." onkeypress="if(event.key === 'Enter') sendMessage()">
+        <p class="disclaimer">Don't rely on the Travel Assistant as it may not have any expertise integrated with the LLM AI model. Please connect with me for accurate information.</p>
+    </div>
+    <div class="contacts" id="contacts">
+        <div class="content">
+            <h2>Contact Me</h2>
+            <div class="contact-info">
+                <img src="contact.gif" alt="Contact Image" class="contact-img">
+                <p><strong>Phone:</strong> No. 9739105654</p>
+                <p><strong>Email:</strong> sumitragoswami8@gmail.com</p>
+                <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/sumitragoswami" target="_blank">LinkedIn Profile</a></p>
+                <p><strong>WhatsApp:</strong> <a href="https://wa.me/9739105654" target="_blank">Chat on WhatsApp</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+    async function sendMessage() {
+        const input = document.getElementById('chatbot-input');
+        const message = input.value;
+        if (!message) return;
+
+        const messagesDiv = document.getElementById('chatbot-messages');
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.className = 'user-message';
+        userMessageDiv.textContent = message;
+        messagesDiv.appendChild(userMessageDiv);
+
+        input.value = '';
+
+        try {
+            const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer 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',
+                    'HTTP-Referer': '<YOUR_SITE_URL>', // Optional. Replace with your site URL.
+                    'X-Title': '<YOUR_SITE_NAME>', // Optional. Replace with your site name.
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: 'deepseek/deepseek-r1-distill-llama-70b:free',
+                    messages: [
+                        {
+                            role: 'user',
+                            content: message
+                        }
+                    ]
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+            }
+
+            const data = await response.json();
+            const botMessageDiv = document.createElement('div');
+            botMessageDiv.className = 'bot-message';
+            botMessageDiv.textContent = data.choices[0].message.content;
+            messagesDiv.appendChild(botMessageDiv);
+        } catch (error) {
+            console.error('Error:', error);
+            const errorMessageDiv = document.createElement('div');
+            errorMessageDiv.className = 'bot-message';
+            errorMessageDiv.textContent = 'Sorry, something went wrong. Please try again later.';
+            messagesDiv.appendChild(errorMessageDiv);
+        }
+    }
+    </script>
+</body>
+</html>
